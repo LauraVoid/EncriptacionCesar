@@ -15,17 +15,21 @@ public class ClientHandler implements Runnable {
 	final DataOutputStream out;
 	Socket socket;
 	boolean connected;
+	boolean cliente;
 
-	public ClientHandler(Socket s, String name, DataInputStream dis, DataOutputStream dos) {
+	public ClientHandler(Socket s, String name, DataInputStream dis, DataOutputStream dos, boolean cli) {
 		this.in = dis;
 		this.out = dos;
 		this.name = name;
 		this.socket = s;
 		this.connected = true;
+		cliente=cli;
 	}
 
 	@Override
 	public void run() {
+		
+		
 
 		String received; 
 		
@@ -45,22 +49,31 @@ public class ClientHandler implements Runnable {
                 } 
                   
                 // break the string into message and recipient part 
-                StringTokenizer st = new StringTokenizer(received); 
-                String MsgToSend = st.nextToken(); 
-                String recipient = st.nextToken(); 
+//                StringTokenizer st = new StringTokenizer(received, "-"); 
+//                String MsgToSend = st.nextToken(); 
+//                String recipient = st.nextToken(); 
+                
+                if ( cliente==false)  
+                { 
+                	Server.clients.get(1).out.writeUTF(this.name+" : "+received);
+                	
+                     
+                } 
+                else {
+                	Server.clients.get(0).out.writeUTF(this.name+" : "+received);
+                	
+                	
+                }
+                
   
                 // search for the recipient in the connected devices list. 
                 // ar is the vector storing client of active users 
-                for (ClientHandler mc : Server.clients)  
-                { 
-                    // if the recipient is found, write on its 
-                    // output stream 
-                    if (mc.name.equals(recipient) && mc.connected==true)  
-                    { 
-                        mc.out.writeUTF(this.name+" : "+MsgToSend); 
-                        break; 
-                    } 
-                } 
+//                for (ClientHandler mc : Server.clients)  
+//                { 
+//                    // if the recipient is found, write on its 
+//                    // output stream 
+//                   
+//                } 
             } catch (IOException e) { 
                   
                 e.printStackTrace(); 
@@ -77,5 +90,6 @@ public class ClientHandler implements Runnable {
             e.printStackTrace(); 
         } 
 	}
+
 
 }

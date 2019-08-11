@@ -26,27 +26,37 @@ public class Server {
 	private static Socket socket;
 
 	public static void main(String[] args) {
+		String key=asignarClave();
+		String hexa=claveHexadecimal(key);
+		String info="Dec_"+key+" hexa_"+hexa;
 
 		DataInputStream in;
 		DataOutputStream out;
+		
 
 		int i=0;
 		try {
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("::Servidor escuchando a los posibles clientes::");
-
+			boolean rev=true;
+			if(i==0) {
+				rev=false;
+			}
 			while (true) {
 
 				socket = serverSocket.accept();
-				System.out.println("El cliente se ha conectado!");
+				System.out.println("El cliente se ha conectado!"+i);
 				in = new DataInputStream(socket.getInputStream());
-				out = new DataOutputStream(socket.getOutputStream());
-				ClientHandler client= new ClientHandler(socket,"Cliente" +i,in,out);
+				out = new DataOutputStream(socket.getOutputStream());				
+				ClientHandler client= new ClientHandler(socket,"c" +i,in,out,rev);
 				Thread t =new Thread(client);
+				
+				
 				 	
 				
 				clients.add(client);
 				t.start();
+				out.writeUTF(hexa);
 				i++;
 				
 //				String key=asignarClave();
@@ -78,6 +88,13 @@ public class Server {
 		return key+"";
 		
 		
+	}
+	private static String claveHexadecimal(String key) {
+		String clave="";
+		int claveRandom= Integer.parseInt(key);		
+		clave= Integer.toHexString(claveRandom);
+		
+		return clave;
 	}
 
 	/**

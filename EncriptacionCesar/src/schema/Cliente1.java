@@ -15,7 +15,7 @@ public class Cliente1 {
 	 * 
 	 * Direccion local de la maquina
 	 */
-	public static final String LOCAL_HOST = "localhost";
+	public static final String LOCAL_HOST = "192.168.199.52";
 	/**
 	 * Puerto por donde se establecera la conexion
 	 */
@@ -47,7 +47,9 @@ public class Cliente1 {
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
 //			String mensaje = br.readLine();
-//			int clave=Integer.parseInt( in.readUTF());
+			int clave=Integer.parseInt(in.readUTF());
+			System.out.println("La clave del chat en hexadecimal es: " +clave);
+			
 //			String cesar= encriptarMensaje(mensaje, clave);			
 //			out.writeUTF(cesar);
 			
@@ -62,8 +64,9 @@ public class Cliente1 {
 	                      
 	                    try { 
 	                    	 String msg = br.readLine(); 
+	                    	 String msgCesar=encriptarMensaje(msg, clave);
 	                        // write on the output stream 
-	                        out.writeUTF(msg); 
+	                        out.writeUTF(msgCesar); 
 	                    } catch (IOException e) { 
 	                        e.printStackTrace(); 
 	                    } 
