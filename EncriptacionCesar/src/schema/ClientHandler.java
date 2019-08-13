@@ -15,15 +15,17 @@ public class ClientHandler implements Runnable {
 	final DataOutputStream out;
 	Socket socket;
 	boolean connected;
-	boolean cliente;
+	boolean estado;
+	
 
-	public ClientHandler(Socket s, String name, DataInputStream dis, DataOutputStream dos, boolean cli) {
+	public ClientHandler(Socket s, String name, DataInputStream dis, DataOutputStream dos, boolean estado) {
 		this.in = dis;
 		this.out = dos;
 		this.name = name;
 		this.socket = s;
 		this.connected = true;
-		cliente=cli;
+		this.estado=estado;
+		
 	}
 
 	@Override
@@ -45,35 +47,37 @@ public class ClientHandler implements Runnable {
                 if(received.equals("logout")){ 
                     this.connected=false; 
                     this.socket.close(); 
+                    
                     break; 
                 } 
                   
                 // break the string into message and recipient part 
-//                StringTokenizer st = new StringTokenizer(received, "-"); 
-//                String MsgToSend = st.nextToken(); 
-//                String recipient = st.nextToken(); 
                 
-                if ( cliente==false)  
-                { 
-                	Server.clients.get(1).out.writeUTF(this.name+" : "+received);
-                	
-                     
-                } 
-                else {
-                	Server.clients.get(0).out.writeUTF(this.name+" : "+received);
-                	
-                	
-                }
+                StringTokenizer st = new StringTokenizer(received, "#"); 
+                String MsgToSend = st.nextToken(); 
+//                String recipient = st.nextToken(); 
+               
                 
   
-                // search for the recipient in the connected devices list. 
-                // ar is the vector storing client of active users 
 //                for (ClientHandler mc : Server.clients)  
 //                { 
 //                    // if the recipient is found, write on its 
-//                    // output stream 
+//                	if (mc.name.equals(recipient) && mc.connected==true)  
+//                    { 
+//                        mc.out.writeUTF(this.name+" : "+MsgToSend); 
+//                        break; 
+//                    }  	
+//                	
 //                   
 //                } 
+                if(this.estado==true) {
+                	Server.clients.get(1).out.writeUTF(this.name+" : "+MsgToSend);
+            		
+            	}
+                else {
+                	Server.clients.get(0).out.writeUTF(this.name+" : "+MsgToSend);
+                	
+                }
             } catch (IOException e) { 
                   
                 e.printStackTrace(); 
