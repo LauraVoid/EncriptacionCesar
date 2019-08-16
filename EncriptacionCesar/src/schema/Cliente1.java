@@ -67,7 +67,7 @@ public class Cliente1 {
 	                        // write on the output stream 
 	                    	 String msg = br.readLine();  
 	                    	 String msgCesar=encriptarMensaje(msg, clave);
-	                        out.writeUTF(msg); 
+	                        out.writeUTF(msgCesar); 
 	                    } catch (IOException e) { 
 	                        e.printStackTrace(); 
 	                    } 

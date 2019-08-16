@@ -82,7 +82,7 @@ public class Server {
 	}
 	private static String asignarClave() {
 		
-		int key=(int)(Math.random()*20);
+		int key=(int)(Math.random()*20)+1;
 		
 		return key+"";
 		
